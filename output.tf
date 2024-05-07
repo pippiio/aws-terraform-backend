@@ -3,7 +3,7 @@ output "backend" {
     terraform {
       backend "s3" {
         bucket         = "${aws_s3_bucket.this.bucket}"
-        key            = "${terraform.workspace}.tfstate"
+        key            = "${tfstate}.tfstate"
         region         = "${local.region_name}"
         encrypt        = true
         dynamodb_table = "${aws_dynamodb_table.this[tfstate].name}"
