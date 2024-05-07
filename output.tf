@@ -1,12 +1,12 @@
 output "backend" {
-  value = <<-EOL
+  value = { for tfstate in var.tfstate : tfstate => <<-EOL
     terraform {
       backend "s3" {
         bucket         = "${aws_s3_bucket.this.bucket}"
         key            = "${terraform.workspace}.tfstate"
         region         = "${local.region_name}"
         encrypt        = true
-        dynamodb_table = "${aws_dynamodb_table.this.name}"
+        dynamodb_table = "${aws_dynamodb_table.this[tfstate].name}"
         allowed_account_ids = ["${local.account_id}"]
 
         # assume_role = {
@@ -21,4 +21,5 @@ output "backend" {
       }
     }
   EOL
+  }
 }

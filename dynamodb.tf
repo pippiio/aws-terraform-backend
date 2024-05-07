@@ -1,5 +1,7 @@
 resource "aws_dynamodb_table" "this" {
-  name         = "${local.name_prefix}${var.name}-tfstate-lock"
+  for_each = length(var.tfstate) > 0 ? var.tfstate : toset([var.name])
+
+  name         = "${local.name_prefix}${var.name}-${each.key}-tfstate"
   billing_mode = "PAY_PER_REQUEST"
   hash_key     = "LockID"
 
