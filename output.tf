@@ -1,23 +1,24 @@
 output "backend" {
-  value = { for tfstate in var.tfstate : tfstate => <<-EOL
+  description = "A map of backends with example usage"
+  value = { for backend in var.backends : backend => <<-EOL
     terraform {
       backend "s3" {
-        bucket         = "${aws_s3_bucket.this.bucket}"
-        key            = "${tfstate}.tfstate"
-        region         = "${local.region_name}"
+        bucket         = "${aws_s3_bucket.this[each.key].bucket}"
+        key            = "${backend}.tfstate"
+        region         = "${local.metadata.region}"
         encrypt        = true
         dynamodb_table = "${aws_dynamodb_table.this[tfstate].name}"
-        allowed_account_ids = ["${local.account_id}"]
+        allowed_account_ids = ["${local.metadata.account}"]
 
-        # assume_role = {
-        #   role_arn     = "arn:aws:iam::${local.account_id}:role/OrganizationAccountAccessRole"
-        #   session_name = "Terraform"
-        # }
+        # Use the below to have GitHub actions assume an IAM role using OIDC
+        assume_role_with_web_identity = {
+          role_arn                = var.backend_iam_role
+          session_name            = "github-actions-session"
+          web_identity_token_file = "/tmp/web_identity_token_file"
+        }
 
         # Local apply only - DO NOT commit to git
-        # access_key          = ""
-        # secret_key          = ""
-        # token               = ""
+        # profile = ""
       }
     }
   EOL
