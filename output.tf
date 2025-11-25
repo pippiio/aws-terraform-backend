@@ -6,7 +6,8 @@ output "backend" {
         key            = "${tfstate}.tfstate"
         region         = "${local.region_name}"
         encrypt        = true
-        dynamodb_table = "${aws_dynamodb_table.this[tfstate].name}"
+        kms_key_id     = "${aws_kms_alias.this.arn}"
+        use_lockfile        = true        
         allowed_account_ids = ["${local.account_id}"]
 
         # assume_role = {

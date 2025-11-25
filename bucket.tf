@@ -1,5 +1,10 @@
 resource "aws_s3_bucket" "this" {
   bucket = "${local.name_prefix}${var.name}-tfstate"
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [bucket]
+  }
 }
 
 resource "aws_s3_bucket_versioning" "this" {
@@ -16,6 +21,10 @@ resource "aws_s3_bucket_public_access_block" "this" {
   block_public_policy     = true
   ignore_public_acls      = true
   restrict_public_buckets = true
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 resource "aws_s3_bucket_server_side_encryption_configuration" "this" {

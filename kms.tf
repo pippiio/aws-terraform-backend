@@ -8,17 +8,17 @@ resource "aws_kms_key" "this" {
   })
 }
 
-data "aws_iam_policy_document" "kms" {
-  statement {
-    resources = ["*"]
-    actions   = ["kms:*"]
+# data "aws_iam_policy_document" "kms" {
+#   statement {
+#     resources = ["*"]
+#     actions   = ["kms:*"]
 
-    principals {
-      type        = "AWS"
-      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.id}:root"]
-    }
-  }
-}
+#     principals {
+#       type        = "AWS"
+#       identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.id}:root"]
+#     }
+#   }
+# }
 
 resource "aws_kms_alias" "this" {
   name          = "alias/${var.name_prefix}${var.name}-tfstate"
