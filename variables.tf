@@ -1,8 +1,11 @@
 variable "name" {
-  type = string
+  description = "Name of tfstate bucket"
+  type        = string
+  nullable    = false
 }
 
 variable "tfstate" {
-  type    = set(string)
-  default = []
+  description = "A list of tfstates to create within bucket"
+  type        = set(string)
+  default     = []
 }
