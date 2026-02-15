@@ -29,7 +29,7 @@ data "aws_iam_policy_document" "oidc" {
     content {
       effect    = "Allow"
       actions   = ["s3:GetObject", "s3:PutObject"]
-      resources = ["${aws_s3_bucket.this.arn}/${each.key}"]
+      resources = ["${aws_s3_bucket.this.arn}/${statement.key}"]
     }
   }
 
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "oidc" {
     content {
       effect    = "Allow"
       actions   = ["s3:GetObject", "s3:PutObject", "s3:DeleteObject"]
-      resources = ["${aws_s3_bucket.this.arn}/${each.key}.tflock"]
+      resources = ["${aws_s3_bucket.this.arn}/${statement.key}.tflock"]
     }
   }
 }
