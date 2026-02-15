@@ -1,5 +1,10 @@
 resource "aws_s3_bucket" "this" {
   bucket = "${local.name_prefix}${var.name}-tfstate"
+
+  lifecycle {
+    prevent_destroy = true
+    ignore_changes  = [bucket]
+  }
 }
 
 resource "aws_s3_bucket_versioning" "this" {
