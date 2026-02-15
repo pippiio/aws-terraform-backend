@@ -1,4 +1,5 @@
 output "backend" {
+  description = "Example backend manifest for tfstate"
   value = { for tfstate in var.tfstate : tfstate => <<-EOL
     terraform {
       backend "s3" {
@@ -8,13 +9,13 @@ output "backend" {
         encrypt             = true
         use_lockfile        = true
         allowed_account_ids = ["${local.account_id}"]
-
-        # assume_role = {
-        #   role_arn     = "arn:aws:iam::${local.account_id}:role/OrganizationAccountAccessRole"
-        #   session_name = "Terraform"
-        # }
       }
     }
   EOL
   }
+}
+
+output "github_assume_rold_arn" {
+  description = "IAM roled to be assumed by GitHub actions using OIDC"
+  value       = try(aws_iam_role.oidc[0].arn, null)
 }
